@@ -1,8 +1,7 @@
 const { User } = require("../models");
+
 exports.getProfile = async (req, res) => {
   try {
-    console.log("USER FROM TOKEN:", req.user); // 🔍 DEBUG
-
     const user = await User.findOne({
       where: { userid: req.user.userid },
     });
@@ -22,4 +21,3 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
