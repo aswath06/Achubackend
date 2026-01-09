@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { User } = require("../models");
 const sendEmail = require("../utils/sendEmail");
+const { Op } = require("sequelize");
 
-/* REGISTER */
+/* ================= REGISTER ================= */
 exports.register = async (req, res) => {
   try {
     const { name, email, phoneNumber, password, amount } = req.body;
@@ -25,7 +26,7 @@ exports.register = async (req, res) => {
   }
 };
 
-/* LOGIN */
+/* ================= LOGIN ================= */
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,7 +50,7 @@ exports.login = async (req, res) => {
   }
 };
 
-/* 🔑 FORGOT PASSWORD (SEND EMAIL LINK) */
+/* ================= FORGOT PASSWORD ================= */
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -59,10 +60,16 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Generate token
+    // RAW token (send via email)
     const resetToken = crypto.randomBytes(32).toString("hex");
 
-    user.resetPasswordToken = resetToken;
+    // HASHED token (store in DB)
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 mins
     await user.save();
 
@@ -85,15 +92,23 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-/* 🔁 RESET PASSWORD */
+/* ================= RESET PASSWORD ================= */
 exports.resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
+    // HASH incoming token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
     const user = await User.findOne({
       where: {
-        resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() },
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: {
+          [Op.gt]: Date.now(),
+        },
       },
     });
 
