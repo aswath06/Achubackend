@@ -2,6 +2,7 @@ const db = require("../models");
 const VehicleFuel = db.VehicleFuel;
 const Vehicle = db.Vehicle;
 const Bunk = db.Bunk;
+const BunkStatement = db.BunkStatement;
 
 exports.createVehicleFuel = async (req, res) => {
   try {
@@ -31,8 +32,19 @@ exports.createVehicleFuel = async (req, res) => {
       await bunk.save();
     }
 
+    // 4️⃣ Add entry to BunkStatement automatically
+    await BunkStatement.create({
+      bunkId,
+      vehicleId,
+      fuelId: fuel.fuelId,
+      date,
+      amount,
+      isFueled: 1, // always 1 since this is fuel addition
+    });
+
     res.status(201).json(fuel);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
