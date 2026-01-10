@@ -30,6 +30,7 @@ db.VehicleService.belongsTo(db.Vehicle, {
   foreignKey: "vehicleId",
   as: "vehicle",
 });
+db.Bunk = require("./Bunk")(sequelize, Sequelize.DataTypes);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
