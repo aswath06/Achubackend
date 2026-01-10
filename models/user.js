@@ -8,41 +8,31 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
       },
 
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      email: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-
-      phoneNumber: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      password: DataTypes.STRING,
 
       amount: {
         type: DataTypes.FLOAT,
         defaultValue: 0,
       },
 
-      imageUrl: {
+      imageUrl: DataTypes.STRING,
+
+      aadharUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      drivingLicenceUrl: {
         type: DataTypes.STRING,
         allowNull: true,
       },
 
       userRole: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 3, // 1=Admin, 2=Driver, 3=Customer
+        defaultValue: 3,
       },
 
       isDeleted: {

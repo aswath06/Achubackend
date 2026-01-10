@@ -5,12 +5,12 @@ const sendEmail = async (to, subject, html) => {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, // App password
+      pass: process.env.EMAIL_PASS, // Gmail App Password
     },
   });
 
   await transporter.sendMail({
-    from: `"Support" <${process.env.EMAIL_USER}>`,
+    from: `"Support Team" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,

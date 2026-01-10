@@ -14,19 +14,20 @@ exports.getProfile = async (req, res) => {
         "phoneNumber",
         "amount",
         "imageUrl",
+        "aadharUrl",
+        "drivingLicenceUrl",
         "userRole",
       ],
     });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 exports.updateProfileImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -77,3 +78,57 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+exports.updateAadharImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No Aadhar image uploaded" });
+    }
+
+    const aadharUrl = `/images/${req.file.filename}`;
+
+    await User.update(
+      { aadharUrl },
+      {
+        where: {
+          userid: req.user.userid,
+          isDeleted: false,
+        },
+      }
+    );
+
+    res.json({
+      message: "Aadhar card uploaded successfully",
+      aadharUrl,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.updateDrivingLicenceImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No Driving Licence image uploaded" });
+    }
+
+    const drivingLicenceUrl = `/images/${req.file.filename}`;
+
+    await User.update(
+      { drivingLicenceUrl },
+      {
+        where: {
+          userid: req.user.userid,
+          isDeleted: false,
+        },
+      }
+    );
+
+    res.json({
+      message: "Driving licence uploaded successfully",
+      drivingLicenceUrl,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
