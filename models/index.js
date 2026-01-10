@@ -21,6 +21,15 @@ fs.readdirSync(__dirname)
     );
     db[model.name] = model;
   });
+db.Vehicle.hasMany(db.VehicleService, {
+  foreignKey: "vehicleId",
+  as: "services",
+});
+
+db.VehicleService.belongsTo(db.Vehicle, {
+  foreignKey: "vehicleId",
+  as: "vehicle",
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
