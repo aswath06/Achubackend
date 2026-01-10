@@ -31,6 +31,11 @@ db.VehicleService.belongsTo(db.Vehicle, {
   as: "vehicle",
 });
 db.Bunk = require("./Bunk")(sequelize, Sequelize.DataTypes);
+db.Vehicle.hasMany(db.VehicleFuel, { foreignKey: "vehicleId", as: "fuels" });
+db.VehicleFuel.belongsTo(db.Vehicle, { foreignKey: "vehicleId", as: "vehicle" });
+
+db.Bunk.hasMany(db.VehicleFuel, { foreignKey: "bunkId", as: "fuels" });
+db.VehicleFuel.belongsTo(db.Bunk, { foreignKey: "bunkId", as: "bunk" });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
