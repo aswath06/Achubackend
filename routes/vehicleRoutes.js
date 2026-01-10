@@ -1,12 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const vehicleController = require("../controllers/vehicleController");
-const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/", authMiddleware, vehicleController.createVehicle);
-router.get("/", authMiddleware, vehicleController.getAllVehicles);
-router.get("/:id", authMiddleware, vehicleController.getVehicleById);
-router.put("/:id", authMiddleware, vehicleController.updateVehicle);
-router.delete("/:id", authMiddleware, vehicleController.deleteVehicle);
+const {
+  createVehicle,
+  getAllVehicles,
+  getVehicleById,
+  updateVehicle,
+  deleteVehicle,
+  toggleVehicleStatus,
+} = require("../controllers/vehicleController");
+
+// Routes
+router.post("/", createVehicle);
+router.get("/", getAllVehicles);
+router.get("/:id", getVehicleById);
+router.put("/:id", updateVehicle);
+router.delete("/:id", deleteVehicle);
+router.patch("/:id/toggle-status", toggleVehicleStatus);
 
 module.exports = router;

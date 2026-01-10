@@ -33,15 +33,16 @@ exports.getVehicleById = async (req, res) => {
 
 exports.updateVehicle = async (req, res) => {
   try {
-    const updated = await Vehicle.update(req.body, {
+    const [updated] = await Vehicle.update(req.body, {
       where: { id: req.params.id },
     });
 
-    if (!updated[0]) {
+    if (!updated) {
       return res.status(404).json({ message: "Vehicle not found" });
     }
 
-    res.json({ message: "Vehicle updated successfully" });
+    const updatedVehicle = await Vehicle.findByPk(req.params.id);
+    res.json(updatedVehicle);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -58,6 +59,25 @@ exports.deleteVehicle = async (req, res) => {
     }
 
     res.json({ message: "Vehicle deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.toggleVehicleStatus = async (req, res) => {
+  try {
+    const vehicle = await Vehicle.findByPk(req.params.id);
+    if (!vehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    vehicle.isActive = !vehicle.isActive;
+    await vehicle.save();
+
+    res.json({
+      message: "Vehicle status updated",
+      isActive: vehicle.isActive,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
