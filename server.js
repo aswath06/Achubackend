@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path");  
 
 const app = express();
 const db = require("./models");
@@ -16,6 +17,7 @@ app.use("/api/vehicles", require("./routes/vehicleRoutes"));
 app.use("/api/vehicle-services", require("./routes/vehicleServiceRoutes"));
 app.use("/api/bunks", require("./routes/bunkRoutes"));
 app.use("/api/vehicle-fuels", require("./routes/vehicleFuelRoutes"));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // ✅ Correct bunk statements route
 const bunkStatementRoutes = require("./routes/bunkStatementRoutes");

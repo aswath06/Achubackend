@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const upload = require("../middleware/upload");
 const {
   createVehicle,
   getAllVehicles,
@@ -10,11 +10,18 @@ const {
   toggleVehicleStatus,
 } = require("../controllers/vehicleController");
 
-// Routes
-router.post("/", createVehicle);
+// Multiple image upload
+const vehicleUpload = upload.fields([
+  { name: "rcImage", maxCount: 1 },
+  { name: "insuranceImage", maxCount: 1 },
+  { name: "pollutionImage", maxCount: 1 },
+  { name: "speedImage", maxCount: 1 },
+]);
+
+router.post("/", vehicleUpload, createVehicle);
+router.put("/:id", vehicleUpload, updateVehicle);
 router.get("/", getAllVehicles);
 router.get("/:id", getVehicleById);
-router.put("/:id", updateVehicle);
 router.delete("/:id", deleteVehicle);
 router.patch("/:id/toggle-status", toggleVehicleStatus);
 
