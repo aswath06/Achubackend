@@ -8,6 +8,7 @@ const {
   updateProfileImage,
   updateAadharImage,
   updateDrivingLicenceImage,
+  updateDrivingLicenceBack,
   getAllUsers,
   deleteUser,
 } = require("../controllers/userController");
@@ -30,19 +31,26 @@ router.put(
   updateAadharImage
 );
 
-// Driving Licence Upload
+// Driving Licence Front Upload
 router.put(
   "/profile/driving-licence",
   verifyToken,
-  upload.single("drivingLicence"), // ✅ Correct
+  upload.single("drivingLicence"),
   updateDrivingLicenceImage
 );
 
+// Driving Licence Back Upload + Validity Date
+router.put(
+  "/profile/driving-licence/back",
+  verifyToken,
+  upload.single("drivingLicenceBack"),
+  updateDrivingLicenceBack
+);
 
-// All users
+// All Users
 router.get("/", verifyToken, getAllUsers);
 
-// Soft delete
+// Soft Delete
 router.delete("/:userid", verifyToken, deleteUser);
 
 module.exports = router;
