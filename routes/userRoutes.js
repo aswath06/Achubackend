@@ -34,9 +34,10 @@ router.put(
 router.put(
   "/profile/driving-licence",
   verifyToken,
-  upload.single("licence"),
+  upload.single("drivingLicence"), // ✅ Correct
   updateDrivingLicenceImage
 );
+
 
 // All users
 router.get("/", verifyToken, getAllUsers);
