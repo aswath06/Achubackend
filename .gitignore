@@ -6,7 +6,7 @@ node_modules/
 logs/
 
 # Environment variables
-.env
+# .env
 
 # Uploaded images
 images/

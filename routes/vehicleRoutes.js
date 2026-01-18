@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload");
+
 const {
   createVehicle,
   getAllVehicles,
@@ -10,8 +11,9 @@ const {
   toggleVehicleStatus,
 } = require("../controllers/vehicleController");
 
-// Multiple image upload
+// ✅ Multer fields
 const vehicleUpload = upload.fields([
+  { name: "vehicleImage", maxCount: 1 },
   { name: "rcImage", maxCount: 1 },
   { name: "insuranceImage", maxCount: 1 },
   { name: "pollutionImage", maxCount: 1 },
@@ -20,6 +22,7 @@ const vehicleUpload = upload.fields([
 
 router.post("/", vehicleUpload, createVehicle);
 router.put("/:id", vehicleUpload, updateVehicle);
+
 router.get("/", getAllVehicles);
 router.get("/:id", getVehicleById);
 router.delete("/:id", deleteVehicle);
